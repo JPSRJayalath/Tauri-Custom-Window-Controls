@@ -4,6 +4,10 @@
   --text: #1b1b1b;
   --text-secondary: #5f5f5f;
   --titlebar-hover: rgba(0, 0, 0, 0.06);
+  --titlebar-pill-border: rgba(119, 117, 117, 0.8);
+  --titlebar-pill-bg: rgba(255, 255, 255, 0.7);
+  --accent-active: #30d158;
+  --accent-inactive: #a1a1a6;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -12,6 +16,8 @@
     --text: #f5f5f5;
     --text-secondary: #b3b3b3;
     --titlebar-hover: rgba(255, 255, 255, 0.08);
+    --titlebar-pill-border: rgba(255, 255, 255, 0.22);
+    --titlebar-pill-bg: rgba(255, 255, 255, 0.06);
   }
 }
 
@@ -23,6 +29,7 @@ body,
 }
 
 body {
+  overflow: hidden;
   background: var(--bg);
   color: var(--text);
   font-family: "Segoe UI Variable", "Segoe UI", sans-serif;
@@ -33,24 +40,29 @@ body {
   flex-direction: column;
 }
 
+/* ---------- Title bar ---------- */
 .titlebar {
+  position: relative; /* required: the pill and title are absolute */
   display: flex;
   flex: 0 0 var(--titlebar-height);
   align-items: center;
-  justify-content: center;
   height: var(--titlebar-height);
-  padding-left: 14px;
   background: var(--bg);
-  /* background: red; */
   user-select: none;
   -webkit-user-select: none;
 }
 
 .titlebar__title {
+  position: absolute;
+  left: 50%;
+  max-width: 45%;
   overflow: hidden;
   font-size: 12px;
   font-weight: 600;
   white-space: nowrap;
+  text-overflow: ellipsis;
+  transform: translateX(-50%);
+  pointer-events: none; /* clicks fall through to the drag region */
 }
 
 .titlebar__drag {
@@ -58,6 +70,7 @@ body {
   align-self: stretch;
 }
 
+/* ---------- Caption buttons ---------- */
 .window-controls {
   display: flex;
   height: 100%;
@@ -83,46 +96,89 @@ body {
   color: var(--text);
 }
 
+.window-control:active {
+  background: rgba(0, 0, 0, 0.12);
+}
+
 .window-control:focus-visible {
   outline: 2px solid #0067c0;
   outline-offset: -2px;
 }
 
-.window-control--close:hover {
+.window-control--close:hover,
+.window-control--close:active {
   background: #c42b1c;
   color: #ffffff;
 }
 
-/* Inactive window appearance, like the native Windows title bar. */
-[data-active="false"] .titlebar__title {
+.window-control--close:active {
+  background: #a02618;
+}
+
+/* ---------- Inactive window ---------- */
+.titlebar[data-active="false"] .titlebar__title {
   color: var(--text-secondary);
 }
 
-[data-active="false"] .window-control svg {
+.titlebar[data-active="false"] .window-control svg {
   opacity: 0.5;
 }
 
-.activeWindowsIndicator{
-  left: 0;
+/* ...but never dim the icon on the red close hover */
+.titlebar[data-active="false"] .window-control:hover svg {
+  opacity: 1;
+}
+
+/* ---------- Active indicator ---------- */
+.activeWindowsIndicator {
   position: absolute;
+  left: 10px;
+  top: 50%;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  margin-left: 10px;
-  gap: 10px;
-  display: inline-flex;
-  padding: 5px 11px;
-  border: 1px solid rgba(119, 117, 117, 0.8);
+  gap: 7px;
+  padding: 4px 10px;
+  border: 1px solid var(--titlebar-pill-border);
   border-radius: 999px;
+  background: var(--titlebar-pill-bg);
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.03);
   font-size: 11px;
   font-weight: 500;
   white-space: nowrap;
+  transform: translateY(-50%);
 }
 
-.activeIndicatorDot{
+.activeIndication {
+  line-height: 1;
+  color: var(--text-secondary);
+}
+
+.activeIndicatorDot {
   width: 7px;
   height: 7px;
   border-radius: 50%;
+  background: var(--accent-inactive);
   opacity: 0.5;
-  transition: background-color 160ms ease, opacity 160ms ease, box-shadow 160ms ease;
+  transition:
+    background-color 160ms ease,
+    opacity 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.titlebar[data-active="true"] .activeIndicatorDot {
+  background: var(--accent-active);
+  opacity: 1;
+  box-shadow: 0 0 0 3px rgba(48, 209, 88, 0.18);
+}
+
+/* ---------- Windows 11: rounded, inset caption buttons ---------- */
+:root[data-windows="11"] .window-control {
+  height: calc(100% - 4px);
+  border-radius: 0 4px 0 0;
+}
+
+/* Windows 10: square, edge-to-edge */
+:root[data-windows="10"] .window-control {
+  border-radius: 0;
 }

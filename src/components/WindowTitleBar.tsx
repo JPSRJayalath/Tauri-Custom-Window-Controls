@@ -4,6 +4,11 @@ import {
   getCurrentWindow,
   type Window as TauriWindow,
 } from "@tauri-apps/api/window";
+import { version } from "@tauri-apps/plugin-os";
+
+type WindowTitleBarProps = {
+  title?: string;
+};
 
 function runWindowAction(action: (window: TauriWindow) => Promise<void>) {
   if (!isTauri()) return;
@@ -13,7 +18,7 @@ function runWindowAction(action: (window: TauriWindow) => Promise<void>) {
   });
 }
 
-export default function WindowTitleBar() {
+export default function WindowTitleBar({title = "Traffic Lights"}: WindowTitleBarProps) {
   const [isActiveWindow, setIsActiveWindow] = useState(true);
   const [isMaximized, setIsMaximized] = useState(false);
 
@@ -83,6 +88,22 @@ export default function WindowTitleBar() {
     };
   }, []);
 
+  // Windows 10 vs 11. The UA string always says "Windows NT 10.0",
+  // so the build number is the only reliable signal (22000 = Windows 11).
+  useEffect(() => {
+    if (!isTauri()) return;
+
+    try {
+      const build = Number(version().split(".")[2] ?? 0);
+
+      if (Number.isFinite(build)) {
+        document.documentElement.dataset.windows = build >= 22000 ? "11" : "10";
+      }
+    } catch (error) {
+      console.error("Could not read OS version:", error);
+    }
+  }, []);
+
   const toggleMaximize = useCallback(async () => {
     if (!isTauri()) return;
 
@@ -102,12 +123,16 @@ export default function WindowTitleBar() {
       data-active={isActiveWindow ? "true" : "false"}
       data-tauri-drag-region
     >
-      <div className="activeWindowsIndicator">
-        <div className="activeIndicatorDot" style={{background: isActiveWindow ? "#30d158" : "#a1a1a6"}}/>
+      <div className="activeWindowsIndicator" data-tauri-drag-region>
+        <span className="activeIndicatorDot" aria-hidden="true" />
         <span className="activeIndication">
           {isActiveWindow ? "Active" : "Inactive"}
         </span>
       </div>
+
+      <span className="titlebar__title" data-tauri-drag-region>
+        {title}
+      </span>
 
       <div className="titlebar__drag" data-tauri-drag-region />
 
@@ -117,7 +142,7 @@ export default function WindowTitleBar() {
           className="window-control"
           aria-label="Minimize"
           title="Minimize"
-          onClick={() => runWindowAction((window) => window.minimize())}
+          onClick={() => runWindowAction((win) => win.minimize())}
         >
           <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true">
             <path d="M0 5.5h10" stroke="currentColor" strokeWidth="1" />
@@ -169,7 +194,7 @@ export default function WindowTitleBar() {
           className="window-control window-control--close"
           aria-label="Close"
           title="Close"
-          onClick={() => runWindowAction((window) => window.close())}
+          onClick={() => runWindowAction((win) => win.close())}
         >
           <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true">
             <path
