@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2c2c31"/>
+      <stop offset="1" stop-color="#161619"/>
+    </linearGradient>
+  </defs>
+  <!-- Background panel stays fixed -->
+  <rect x="32" y="32" width="960" height="960" rx="216" fill="url(#bg)"/>
+  <rect x="32" y="32" width="960" height="960" rx="216" fill="none" stroke="#ffffff" stroke-opacity="0.08" stroke-width="8"/>
+  
+  <!-- Grouped inner elements rotated 90 degrees counter-clockwise (-90) around the center (512, 512) -->
+  <g transform="rotate(-90 512 512)">
+    <circle cx="512" cy="300" r="92" fill="#ff5f57"/>
+    <circle cx="512" cy="512" r="92" fill="#febc2e"/>
+    <circle cx="512" cy="724" r="92" fill="#28c840"/>
+  </g>
+</svg>
