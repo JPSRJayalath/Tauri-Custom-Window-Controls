@@ -78,7 +78,7 @@ In Tauri v2, window manipulation APIs require permissions. Add window permission
 
 ### 4. Add macOS Native Dependencies (`src-tauri/Cargo.toml`)
 
-If you are building custom window controls for macOS, you need to add the `objc2-app-kit` crate under target-specific dependencies to handle native window and view bindings in Rust:
+If you are building custom window controls for Windows, you need to add the `windows` crate under target-specific dependencies to handle native window and view bindings in Rust:
 
 ```toml
 [target.'cfg(target_os = "windows")'.dependencies]
