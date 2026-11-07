@@ -231,8 +231,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
 
 ---
 
-## 🎨 Styles (IDE Theme CSS)
-
+## 🎨 Styles (`src/App.css`)
 Add the following CSS rules to style the window controls bar, IDE code container, and copy icon button:
 
 ```css
