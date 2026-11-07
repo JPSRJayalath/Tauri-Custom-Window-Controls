@@ -16,6 +16,9 @@
   --accent-green: #2ec27e;
 
   --radius: 12px;
+
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 @media (prefers-color-scheme: dark) {
