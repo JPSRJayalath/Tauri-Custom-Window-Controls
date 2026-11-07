@@ -8,6 +8,8 @@
   --titlebar-pill-bg: rgba(255, 255, 255, 0.7);
   --accent-active: #30d158;
   --accent-inactive: #a1a1a6;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 @media (prefers-color-scheme: dark) {
