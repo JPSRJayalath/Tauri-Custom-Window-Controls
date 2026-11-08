@@ -64,7 +64,7 @@ In Tauri v2, window manipulation APIs require permissions. Add window permission
 ### 3. Install Tauri Frontend API
 
 ```bash
-npm install @tauri-apps/api
+pnpm install @tauri-apps/api
 ```
 
 ---
