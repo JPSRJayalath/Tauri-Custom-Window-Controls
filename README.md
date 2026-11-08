@@ -84,7 +84,7 @@ objc2-app-kit = { version = "0.3", default-features = false, features = [
 ### 4. Install Tauri Frontend API
 
 ```bash
-npm install @tauri-apps/api
+pnpm install @tauri-apps/api
 ```
 
 ---
