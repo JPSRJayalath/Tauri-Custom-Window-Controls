@@ -50,7 +50,7 @@ cargo add tauri-plugin-os
 ```
 `(optional)` If you also want to use the plugin from your frontend (React/TypeScript), install its JavaScript package:
 ```bash
-npm install @tauri-apps/plugin-os
+pnpm install @tauri-apps/plugin-os
 ```
 
 ---
@@ -94,7 +94,7 @@ windows = { version = "0.62", features = [
 ### 5. Install Tauri Frontend API
 
 ```bash
-npm install @tauri-apps/api
+pnpm install @tauri-apps/api
 ```
 
 ---
